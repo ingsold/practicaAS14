@@ -44,6 +44,9 @@ public class Cifrar {
         }*/
     }
 
+    public void toascii(){
+        System.out.println("PASA A ASCII ");
+    }
     public static void main(String args[]) {
         Cifrar c = new Cifrar();
         c.agregarCeros(255);
