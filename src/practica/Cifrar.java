@@ -47,11 +47,12 @@ public class Cifrar {
     public char[] mueve_clave(char[] clave){
         char[] clavenueva=new char[64];
         
-        for (int i=1;i<64;i++){
-            clavenueva[i]=clave[i+1];
+        for (int i=0;i<63;i++){
+            clavenueva[i+1]=clave[i];
         }
-        clavenueva[0]=clave[64];
-        
+        clavenueva[0]=clave[63];
+        System.out.println("clave anterior:"+Arrays.toString(clave).replace(" ", ""));
+        System.out.println("clave nueva:"+Arrays.toString(clavenueva).replace(" ", ""));     
         return clavenueva;
     }
     public void toascii(){
