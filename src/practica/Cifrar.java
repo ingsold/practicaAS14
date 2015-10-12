@@ -44,6 +44,16 @@ public class Cifrar {
         }*/
     }
 
+    public char[] mueve_clave(char[] clave){
+        char[] clavenueva=new char[64];
+        
+        for (int i=1;i<64;i++){
+            clavenueva[i]=clave[i+1];
+        }
+        clavenueva[0]=clave[64];
+        
+        return clavenueva;
+    }
     public void toascii(){
         System.out.println("PASA A ASCII ");
     }
