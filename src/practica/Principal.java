@@ -5,11 +5,17 @@
  */
 package practica;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Oswaldo
  */
 public class Principal extends javax.swing.JFrame {
+
+    String parse;
+    ArrayList<String> datos = new ArrayList<>();
+    String claveEntrada="";
 
     /**
      * Creates new form Principal
@@ -32,15 +38,15 @@ public class Principal extends javax.swing.JFrame {
         jRadioButton2 = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtAreaEntrada = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtClave = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        txtAreaSalida = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtClaveSalida = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,15 +66,15 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel2.setText("Texto a Cifrar \\n o Descifrar");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtAreaEntrada.setColumns(20);
+        txtAreaEntrada.setRows(5);
+        jScrollPane1.setViewportView(txtAreaEntrada);
 
         jLabel3.setText("Clave");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtClave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtClaveActionPerformed(evt);
             }
         });
 
@@ -81,14 +87,14 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel4.setText("Texto Cifrado");
 
-        jTextArea2.setEditable(false);
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        txtAreaSalida.setEditable(false);
+        txtAreaSalida.setColumns(20);
+        txtAreaSalida.setRows(5);
+        jScrollPane2.setViewportView(txtAreaSalida);
 
         jLabel5.setText("Clave Salida");
 
-        jTextField2.setEnabled(false);
+        txtClaveSalida.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,7 +115,7 @@ public class Principal extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(61, 61, 61)
-                                .addComponent(jTextField1))
+                                .addComponent(txtClave))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
@@ -122,7 +128,7 @@ public class Principal extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(26, 26, 26)
-                                .addComponent(jTextField2)))))
+                                .addComponent(txtClaveSalida)))))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(97, 97, 97)
@@ -144,7 +150,7 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -154,7 +160,7 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtClaveSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(48, 48, 48))
         );
 
@@ -165,18 +171,66 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtClaveActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //Paso 0. Agregar espacios si es necesario al texto
         
-        //Paso 1. Texto a Ascii
+        Cifrar c = new Cifrar();
+        datos = dividirTexto(txtAreaEntrada.getText());
+        System.out.println(datos.size());
         
-        //Paso 2. Ascii operaciones
+        //Revisar clave
+        if(txtClave.getText().length()==8){
+            claveEntrada=txtClave.getText();
+        }else if(txtClave.getText().length()<8){
+            claveEntrada=c.agregarEspacios(txtClave.getText(),8);
+        }else{
+            claveEntrada=txtClave.getText().substring(0, 8);
+        }
+        System.out.println("Clave Entrada: "+claveEntrada);
         
+        for (int i = 0; i<datos.size(); i++) {
+            String dato = datos.get(i);
+            //Paso 0. Agregar espacios si es necesario al texto
+            if (dato.length() < 16) {
+                datos.remove(i);
+                datos.add(i,c.agregarEspacios(dato,16));
+            }
+            
+            //Paso 1. Texto a Ascii
+            ArrayList<Integer> asciisTexto = c.convertirAscii(datos.get(i));
+            ArrayList<Integer> asciisClave = c.convertirAscii(claveEntrada);
+            for (int j = 7; j < asciisTexto.size(); j++) {
+                Integer t = asciisTexto.get(j);
+                Integer cl = asciisClave.get(7-j);
+                System.out.println("Asciis "+t+" "+cl);
+                Integer result = t ^ cl;
+                System.out.println("Resultado: " + result);
+                
+            }
+            //Paso 2. Ascii operaciones
+            
+            if(i>=7){
+                
+            }
+        }
+        
+        
+        
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    public static ArrayList<String> dividirTexto(String text) {
+        // Give the list the right capacity to start with. You could use an array
+        // instead if you wanted.
+        ArrayList<String> ret = new ArrayList<>((text.length() + 16 - 1) / 16);
+        for (int start = 0; start < text.length(); start += 16) {
+            ret.add(text.substring(start, Math.min(text.length(), start + 16)));
+        }
+        return ret;
+    }
 
     /**
      * @param args the command line arguments
@@ -222,9 +276,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextArea txtAreaEntrada;
+    private javax.swing.JTextArea txtAreaSalida;
+    private javax.swing.JTextField txtClave;
+    private javax.swing.JTextField txtClaveSalida;
     // End of variables declaration//GEN-END:variables
 }
