@@ -32,7 +32,7 @@ public class Cifrar {
         ArrayList<Integer> salida = new ArrayList<>();
         for (int i = 0; i < v.length(); i++) {
             salida.add(v.codePointAt(i));
-            System.out.println("Codigo "+i+" es "+v.codePointAt(i));
+            //System.out.println("Codigo "+i+" es "+v.codePointAt(i));
         }
         return salida;
     }

@@ -202,19 +202,20 @@ public class Principal extends javax.swing.JFrame {
             //Paso 1. Texto a Ascii
             ArrayList<Integer> asciisTexto = c.convertirAscii(datos.get(i));
             ArrayList<Integer> asciisClave = c.convertirAscii(claveEntrada);
-            for (int j = 7; j < asciisTexto.size(); j++) {
-                Integer t = asciisTexto.get(j);
-                Integer cl = asciisClave.get(7-j);
-                System.out.println("Asciis "+t+" "+cl);
-                Integer result = t ^ cl;
-                System.out.println("Resultado: " + result);
-                
-            }
+            System.out.println("SIZES: "+asciisClave.size()+" "+ asciisTexto.size());
             //Paso 2. Ascii operaciones
-            
-            if(i>=7){
-                
+            for (int j = 8; j < asciisTexto.size(); j++) {
+                Integer td = asciisTexto.get(j);
+                Integer cl = asciisClave.get(j-8);
+                Integer ti = asciisTexto.get(j-8);
+                System.out.println("Asciis "+td+" "+cl);
+                Integer result = td ^ cl;
+                System.out.println("Resultado: " + result);
+                result =result^ ti;
+                System.out.println("Resultado: " + result);
             }
+            
+            
         }
         
         
