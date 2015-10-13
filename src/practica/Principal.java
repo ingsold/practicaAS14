@@ -190,7 +190,7 @@ public class Principal extends javax.swing.JFrame {
             claveEntrada=txtClave.getText().substring(0, 8);
         }
         System.out.println("Clave Entrada: "+claveEntrada);
-        
+        ArrayList<Integer> cifrado=new ArrayList<>();
         for (int i = 0; i<datos.size(); i++) {
             String dato = datos.get(i);
             //Paso 0. Agregar espacios si es necesario al texto
@@ -202,7 +202,8 @@ public class Principal extends javax.swing.JFrame {
             //Paso 1. Texto a Ascii
             ArrayList<Integer> asciisTexto = c.convertirAscii(datos.get(i));
             ArrayList<Integer> asciisClave = c.convertirAscii(claveEntrada);
-            System.out.println("SIZES: "+asciisClave.size()+" "+ asciisTexto.size());
+            //System.out.println("SIZES: "+asciisClave.size()+" "+ asciisTexto.size());
+            //ArrayList<Integer> cifrado=new ArrayList<>(datos.size()*16);
             //Paso 2. Ascii operaciones
             for (int j = 8; j < asciisTexto.size(); j++) {
                 Integer td = asciisTexto.get(j);
@@ -211,18 +212,37 @@ public class Principal extends javax.swing.JFrame {
                 System.out.println("Asciis "+td+" "+cl);
                 Integer result = td ^ cl;
                 System.out.println("Resultado: " + result);
+                System.out.println("Asciis "+result+" "+ti);
                 result =result^ ti;
                 System.out.println("Resultado: " + result);
+                cifrado.add((j-8)+((j-8)*i), result);
+                
+            }
+            for (int j = 8; j < asciisTexto.size(); j++) {
+                Integer ti = asciisTexto.get(j-8);
+                cifrado.add(j+(j*i),ti);
             }
             
+            
+            imprimirParte(asciisTexto);
+            imprimirParte(cifrado);
             
         }
         
         
         
+        
 
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    public void imprimirParte(ArrayList<Integer> entrada){
+        for (Integer entrada1 : entrada) {
+            //System.out.println("Ascii: " + entrada1);
+            System.out.print(((char) entrada1.intValue()));
+        }
+        System.out.println("");
+        
+    }
     public static ArrayList<String> dividirTexto(String text) {
         // Give the list the right capacity to start with. You could use an array
         // instead if you wanted.
