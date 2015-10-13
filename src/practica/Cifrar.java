@@ -44,7 +44,7 @@ public class Cifrar {
         char[] repeat = new char[number];
         Arrays.fill(repeat, c);
         original = new String(repeat) + original;
-        System.out.println("ORGINAL " + original);
+        //System.out.println("ORGINAL " + original);
         return original;
     }
 
@@ -56,28 +56,43 @@ public class Cifrar {
         entrada += new String(repeat);
         return entrada;
     }
+    
     public ArrayList<Integer> rotacionCircular(ArrayList<Integer> entrada){
+        ArrayList<Integer> salida = new ArrayList<>();
         char[] mover = new char[64];
-        for (Integer entrada1 : entrada) {
-            String a =agregarCeros(entrada1);
-            for (int i = 0; i < a.length(); i++) {
-                char n = a.charAt(i);
-                mover[i]=n;
-            }
+        for (int k = 0; k < entrada.size(); k++) {
+            String a =agregarCeros(entrada.get(k));
+            char[] carac =a.toCharArray();
+            System.arraycopy(carac, 0, mover, k*8, 8);
+            //System.out.println("CLAVE COPIADA "+Arrays.toString(mover));
         }
-        mover=mueveClave(mover);
         
+        //System.out.println("CLAVE ANTES"+Arrays.toString(mover));
+        mover=mueveClave(mover);
+        int parcial=0;
+        for (int i = 0; i < 64; i++) {
+            parcial+=(Integer.valueOf(String.valueOf(mover[i])))*2;
+            //System.out.println("conversion parcial: "+parcial+" "+mover[i]);
+            if (i%7==0){
+                salida.add(parcial);
+                System.out.println("conversion parcial: "+parcial);
+                parcial=(Integer.valueOf(String.valueOf(mover[i])));
+            }
+            
+        }
         return null;
     }
     public char[] mueveClave(char[] clave) {
         char[] clavenueva = new char[64];
-
+        //System.arraycopy(clavenueva, 63, clave, 1, 63);
+        //System.arraycopy(this, srcPos, this, destPos, length);
+        
         for (int i = 0; i < 63; i++) {
-            clavenueva[i + 1] = clave[i];
+            clavenueva[i] = clave[i+1];
         }
-        clavenueva[0] = clave[63];
+        clavenueva[63]=clave[0];
         System.out.println("clave anterior:" + Arrays.toString(clave).replace(" ", ""));
-        System.out.println("clave nueva:" + Arrays.toString(clavenueva).replace(" ", ""));
+        System.out.println("clave nueva   :" + Arrays.toString(clavenueva).replace(" ", ""));
         return clavenueva;
     }
 
