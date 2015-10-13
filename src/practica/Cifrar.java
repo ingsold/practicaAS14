@@ -5,7 +5,6 @@
  */
 package practica;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 import java.util.Arrays;
 
 /**
@@ -55,9 +54,11 @@ public class Cifrar {
         System.out.println("clave nueva:"+Arrays.toString(clavenueva).replace(" ", ""));     
         return clavenueva;
     }
+    
     public void toascii(){
         System.out.println("PASA A ASCII ");
     }
+    
     public static void main(String args[]) {
         Cifrar c = new Cifrar();
         c.agregarCeros(255);
