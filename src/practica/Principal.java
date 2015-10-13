@@ -217,12 +217,12 @@ public class Principal extends javax.swing.JFrame {
                     //System.out.println("Asciis " + result + " " + ti);
                     result = result ^ ti;
                     //System.out.println("Resultado: " + result);
-                    cifrado.add((j - 8) + ((j - 8) * i), result);//truena en la segunda iteracion
+                    cifrado.add((j - 8) /*+ ((j - 8) * i)*/, result);//truena en la segunda iteracion
 
                 }
                 for (int j = 8; j < asciisTexto.size(); j++) {
                     Integer ti = asciisTexto.get(j - 8);
-                    cifrado.add(j + (j * i), ti);
+                    cifrado.add(j /*+ (j * i)*/, ti);
                 }
                 //Paso 3. Mover circularmente la clave
                 asciisClave = c.rotacionCircular(asciisClave);
