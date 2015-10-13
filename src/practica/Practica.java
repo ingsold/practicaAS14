@@ -22,8 +22,8 @@ public class Practica {
            clav[i]=Integer.toBinaryString(letra).toCharArray()[0];
          //  System.out.print(Integer.toString(letra)+"--");
        }
-       clav=c.mueve_clave(clav);
-       clav=c.mueve_clave(clav);
+       clav=c.mueveClave(clav);
+       clav=c.mueveClave(clav);
     }
     
 }

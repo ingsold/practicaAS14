@@ -37,7 +37,7 @@ public class Cifrar {
         return salida;
     }
     
-    public void agregarCeros(int i) {
+    public String agregarCeros(int i) {
         String original = Integer.toBinaryString(i);
         char c = '0';
         int number = 8 - Integer.toBinaryString(i).length();
@@ -45,6 +45,7 @@ public class Cifrar {
         Arrays.fill(repeat, c);
         original = new String(repeat) + original;
         System.out.println("ORGINAL " + original);
+        return original;
     }
 
     public String agregarEspacios(String entrada, int cantidad) {
@@ -55,8 +56,20 @@ public class Cifrar {
         entrada += new String(repeat);
         return entrada;
     }
-
-    public char[] mueve_clave(char[] clave) {
+    public ArrayList<Integer> rotacionCircular(ArrayList<Integer> entrada){
+        char[] mover = new char[64];
+        for (Integer entrada1 : entrada) {
+            String a =agregarCeros(entrada1);
+            for (int i = 0; i < a.length(); i++) {
+                char n = a.charAt(i);
+                mover[i]=n;
+            }
+        }
+        mover=mueveClave(mover);
+        
+        return null;
+    }
+    public char[] mueveClave(char[] clave) {
         char[] clavenueva = new char[64];
 
         for (int i = 0; i < 63; i++) {
