@@ -195,8 +195,8 @@ public class Principal extends javax.swing.JFrame {
             String dato = datos.get(i);
             //Paso 0. Agregar espacios si es necesario al texto
             if (dato.length() < 16) {
-                datos.remove(i);
-                datos.add(i, c.agregarEspacios(dato, 16)); //revisar esto porque creo que no sirve
+                //datos.remove(i);
+                datos.set(i, c.agregarEspacios(dato, 16));
             }
 
             //Paso 1. Texto a Ascii
