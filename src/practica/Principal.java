@@ -196,7 +196,7 @@ public class Principal extends javax.swing.JFrame {
             //Paso 0. Agregar espacios si es necesario al texto
             if (dato.length() < 16) {
                 datos.remove(i);
-                datos.add(i, c.agregarEspacios(dato, 16));
+                datos.add(i, c.agregarEspacios(dato, 16)); //revisar esto porque creo que no sirve
             }
 
             //Paso 1. Texto a Ascii
@@ -206,7 +206,7 @@ public class Principal extends javax.swing.JFrame {
             //ArrayList<Integer> cifrado=new ArrayList<>(datos.size()*16);
             //Paso 2. Ascii operaciones
             int pasos = 8;
-            while (pasos >= 0) {
+            while (pasos > 0) {
                 for (int j = 8; j < asciisTexto.size(); j++) {
                     Integer td = asciisTexto.get(j);
                     Integer cl = asciisClave.get(j - 8);
@@ -217,21 +217,23 @@ public class Principal extends javax.swing.JFrame {
                     //System.out.println("Asciis " + result + " " + ti);
                     result = result ^ ti;
                     //System.out.println("Resultado: " + result);
-                    cifrado.add((j - 8) + ((j - 8) * i), result);
+                    cifrado.add((j - 8) + ((j - 8) * i), result);//truena en la segunda iteracion
 
                 }
                 for (int j = 8; j < asciisTexto.size(); j++) {
                     Integer ti = asciisTexto.get(j - 8);
                     cifrado.add(j + (j * i), ti);
                 }
-                //Mover circularmente la clave
+                //Paso 3. Mover circularmente la clave
                 asciisClave = c.rotacionCircular(asciisClave);
-                asciisTexto= new ArrayList<Integer>(cifrado); //esta linea la esta cagando
-                
+                System.out.println("Paso "+(9-pasos)+":  ");
                 imprimirParte(asciisTexto);
-                //imprimirParte(cifrado);
+                asciisTexto= new ArrayList<Integer>(cifrado);
+                imprimirParte(cifrado);
                 cifrado.clear();
                 pasos--;
+                if(pasos==0)
+                    break;
             }
         }
 
