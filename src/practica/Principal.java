@@ -212,6 +212,7 @@ public class Principal extends javax.swing.JFrame {
                     Integer cl = asciisClave.get(j - 8);
                     Integer ti = asciisTexto.get(j - 8);
                     //System.out.println("Asciis " + td + " " + cl);
+                    //Paso 3. Derecha con clave
                     Integer result = td ^ cl;
                     //System.out.println("Resultado: " + result);
                     //System.out.println("Asciis " + result + " " + ti);
