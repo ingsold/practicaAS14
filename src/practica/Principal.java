@@ -216,16 +216,18 @@ public class Principal extends javax.swing.JFrame {
                     Integer result = td ^ cl;
                     //System.out.println("Resultado: " + result);
                     //System.out.println("Asciis " + result + " " + ti);
+                    //Paso 4. Resultado con Izquierda
                     result = result ^ ti;
                     //System.out.println("Resultado: " + result);
                     cifrado.add((j - 8) /*+ ((j - 8) * i)*/, result);//truena en la segunda iteracion
 
                 }
+                //Paso 5. Resultado a izquierda y el otro a derecha
                 for (int j = 8; j < asciisTexto.size(); j++) {
                     Integer ti = asciisTexto.get(j - 8);
                     cifrado.add(j /*+ (j * i)*/, ti);
                 }
-                //Paso 3. Mover circularmente la clave
+                //Paso 6. Mover circularmente la clave
                 asciisClave = c.rotacionCircular(asciisClave);
                 System.out.println("Paso "+(9-pasos)+":  ");
                 imprimirParte(asciisTexto);
