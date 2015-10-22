@@ -59,7 +59,7 @@ public class Cifrar {
         return entrada;
     }
 
-    public ArrayList<Integer> rotacionCircular(ArrayList<Integer> entrada) {
+    public ArrayList<Integer> rotacionCircular(ArrayList<Integer> entrada, boolean cifra) {
         ArrayList<Integer> salida = new ArrayList<>();
         char[] mover = new char[64];
         for (int k = 0; k < entrada.size(); k++) {
@@ -70,33 +70,47 @@ public class Cifrar {
         }
 
         //System.out.println("CLAVE ANTES  "+Arrays.toString(mover));
-        mover = mueveClave(mover);
+        mover = mueveClave(mover, cifra);
         //System.out.println("CLAVE DESPUES"+Arrays.toString(mover));
-        int parcial = 0;
-        for (int i = 1; i <= 64; i++) {
-            parcial = (parcial * 2) + Integer.valueOf(String.valueOf(mover[i - 1]));
-            //System.out.println("i%8=" +(i%8)+"conversion parcial: "+parcial+" "+mover[i-1]+" "+String.valueOf(mover[i-1]));
-            //System.out.println("i%7=" +(i%7));
-            if (i % 8 == 0 && i > 0) {
-                salida.add(parcial);
-                //System.out.println("conversion final: "+parcial+" "+mover[i-1]+" "+String.valueOf(mover[i-1]));
-                parcial = (Integer.valueOf(String.valueOf(mover[i - 1])));
+        String convierte = "";
+        for (int i = 0; i < 64; i++) {
+            if (convierte.length() > 7) {
+                salida.add(Integer.parseInt(convierte, 2));
+                //System.out.println("salida: " + convierte);
+                convierte = String.valueOf(mover[i]);
+            } else if (i == 63) {
+                convierte = convierte + String.valueOf(mover[i]);
+                salida.add(Integer.parseInt(convierte, 2));
+                //System.out.println("salida: " + convierte);
+                //System.out.println("salida: " + convierte);
+                //convierte=String.valueOf(mover[i]);
+            } else {
+                convierte = convierte + String.valueOf(mover[i]);
             }
-
         }
         //System.out.println("salida size: " + salida.size());
         return salida;
     }
 
-    public char[] mueveClave(char[] clave) {
+    public char[] mueveClave(char[] clave, boolean cifra) {
         char[] clavenueva = new char[64];
-        for (int i = 0; i < 63; i++) {
-            clavenueva[i] = clave[i + 1];
+        if (cifra) {
+            for (int i = 0; i < 63; i++) {
+                clavenueva[i] = clave[i + 1];
+            }
+            clavenueva[63] = clave[0];
+            //System.out.println("clave anterior:" + Arrays.toString(clave).replace(" ", ""));
+            //System.out.println("clave nueva   :" + Arrays.toString(clavenueva).replace(" ", ""));
+            return clavenueva;
+        } else {
+            for (int i = 1; i <= 63; i++) {
+                clavenueva[i] = clave[i - 1];
+            }
+            clavenueva[0] = clave[63];
+            //System.out.println("clave anterior:" + Arrays.toString(clave).replace(" ", ""));
+            //System.out.println("clave nueva   :" + Arrays.toString(clavenueva).replace(" ", ""));
+            return clavenueva;
         }
-        clavenueva[63] = clave[0];
-        //System.out.println("clave anterior:" + Arrays.toString(clave).replace(" ", ""));
-        //System.out.println("clave nueva   :" + Arrays.toString(clavenueva).replace(" ", ""));
-        return clavenueva;
     }
 
     public void toascii() {

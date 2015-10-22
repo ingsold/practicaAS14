@@ -5,7 +5,13 @@
  */
 package practica;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import javax.swing.ButtonGroup;
 
 /**
  *
@@ -16,12 +22,29 @@ public class Principal extends javax.swing.JFrame {
     String parse;
     ArrayList<String> datos = new ArrayList<>();
     String claveEntrada = "";
+    boolean cifrar = true;
 
     /**
      * Creates new form Principal
      */
     public Principal() {
         initComponents();
+        ButtonGroup group = new ButtonGroup();
+        group.add(rboCifrado);
+        group.add(rboDescifrado);
+        inicializaFiles();
+    }
+    public void inicializaFiles(){
+        try{
+            File f = new File("salidatrue.txt");
+            if(f.exists())
+                f.delete();
+            f=new File("salidafalse.txt");
+            if(f.exists())
+                f.delete();
+        }catch(Exception e){
+            
+        }
     }
 
     /**
@@ -33,9 +56,10 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rboCifrado = new javax.swing.JRadioButton();
+        rboDescifrado = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaEntrada = new javax.swing.JTextArea();
@@ -54,15 +78,15 @@ public class Principal extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Cifrado de Feistel");
 
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Cifrado");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        rboCifrado.setSelected(true);
+        rboCifrado.setText("Cifrado");
+        rboCifrado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                rboCifradoActionPerformed(evt);
             }
         });
 
-        jRadioButton2.setText("Descifrado");
+        rboDescifrado.setText("Descifrado");
 
         jLabel2.setText("Texto a Cifrar \\n o Descifrar");
 
@@ -94,20 +118,26 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel5.setText("Clave Salida");
 
-        txtClaveSalida.setEnabled(false);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(124, 124, 124)
+                                .addComponent(rboDescifrado)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(rboCifrado)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -120,11 +150,6 @@ public class Principal extends javax.swing.JFrame {
                                 .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jRadioButton1)
-                                .addGap(47, 47, 47)
-                                .addComponent(jRadioButton2)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(26, 26, 26)
@@ -141,8 +166,8 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                    .addComponent(rboDescifrado)
+                    .addComponent(rboCifrado))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -167,9 +192,9 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void rboCifradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rboCifradoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+    }//GEN-LAST:event_rboCifradoActionPerformed
 
     private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed
         // TODO add your handling code here:
@@ -178,9 +203,14 @@ public class Principal extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         Cifrar c = new Cifrar();
+        datos.clear();
         datos = dividirTexto(txtAreaEntrada.getText());
         System.out.println(datos.size());
-
+        if (rboDescifrado.isSelected()) {
+            cifrar = false;
+        } else {
+            cifrar = true;
+        }
         //Revisar clave
         if (txtClave.getText().length() == 8) {
             claveEntrada = txtClave.getText();
@@ -213,30 +243,107 @@ public class Principal extends javax.swing.JFrame {
                     Integer ti = asciisTexto.get(j - 8);
                     //System.out.println("Asciis " + td + " " + cl);
                     //Paso 3. Derecha con clave
-                    Integer result = td ^ cl;
+                    Integer result;
+                    if (cifrar) {
+                        result = td ^ cl;
+                        if(result>=256)
+                            result=result-256;
+                    } else {
+                        result = ti ^ cl;
+                        if(result>=256)
+                            result=result-256;
+                    }
+
                     //System.out.println("Resultado: " + result);
                     //System.out.println("Asciis " + result + " " + ti);
                     //Paso 4. Resultado con Izquierda
-                    result = result ^ ti;
+                    if (cifrar) {
+                        result = result ^ ti;
+                        if(result>=256)
+                            result=result-256;
+                    } else {
+                        result = result ^ td;
+                        if(result>=256)
+                            result=result-256;
+                    }
+
                     //System.out.println("Resultado: " + result);
-                    cifrado.add((j - 8) /*+ ((j - 8) * i)*/, result);//truena en la segunda iteracion
+                    if (cifrar) {
+                        cifrado.add((j - 8) /*+ ((j - 8) * i)*/, result);
+                    } else {
+                        for (int k = 8; k < 16; k++) {
+                            Integer td2 = asciisTexto.get(k);
+                            if (cifrado.size() >= 8) {
+                                break;
+                            } else {
+                                cifrado.add((k - 8), td2);
+                            }
+                        }
+                        if (cifrado.size() >= 16) {
+                            cifrado.set(j, result);
+                        } else {
+                            cifrado.add(j, result);
+                        }
+                    }
 
                 }
                 //Paso 5. Resultado a izquierda y el otro a derecha
                 for (int j = 8; j < asciisTexto.size(); j++) {
-                    Integer ti = asciisTexto.get(j - 8);
-                    cifrado.add(j /*+ (j * i)*/, ti);
+                    Integer ti;
+                    if (cifrar) {
+                        ti = asciisTexto.get(j - 8);
+                        cifrado.add(j /*+ (j * i)*/, ti);
+                    }
                 }
-                //Paso 6. Mover circularmente la clave
-                asciisClave = c.rotacionCircular(asciisClave);
-                System.out.println("Paso "+(9-pasos)+":  ");
+
+                
+                escribirArchivo(cifrar, "=======================================");
+                System.out.println("=======================================");
+                System.out.println("Paso " + (9 - pasos) + ":  ");
+                escribirArchivo(cifrar, "Paso " + (9 - pasos) + ":  ");
+                System.out.println("=======================================");
+                escribirArchivo(cifrar, "=======================================");
+                escribirArchivo(cifrar, "Texto Entrada: ");
+                System.out.println("Texto Entrada: ");
                 imprimirParte(asciisTexto);
-                asciisTexto= new ArrayList<Integer>(cifrado);
+                //System.out.println(asciisTexto.toString());
+                escribirArchivo(cifrar, asciisTexto.toString());
+                System.out.println("Clave paso: ");
+                escribirArchivo(cifrar, "Clave paso: ");
+                imprimirParte(asciisClave);
+                //System.out.println(asciisClave.toString());
+                escribirArchivo(cifrar, asciisClave.toString());
+                
+                asciisTexto.clear();
+                asciisTexto = new ArrayList<Integer>(cifrado);
+                
+                escribirArchivo(cifrar, "Texto Cifrado:");
+                System.out.println("Texto Cifrado:");
                 imprimirParte(cifrado);
-                cifrado.clear();
+                //System.out.println(cifrado.toString());
+                escribirArchivo(cifrar, cifrado.toString());
+                
+                
+                
                 pasos--;
-                if(pasos==0)
+                if (pasos == 0) {
+                    txtAreaSalida.setText("");
+                    txtClaveSalida.setText("");
+                    for (Integer cifrado1 : cifrado) {
+                        txtAreaSalida.setText(txtAreaSalida.getText()+ Character.toChars(cifrado1)[0]);
+                    }
+                    for (Integer asciisClave1 : asciisClave) {
+                        txtClaveSalida.setText(txtClaveSalida.getText()+Character.toChars(asciisClave1)[0]);
+                    }
+                    if(!cifrar){
+                        txtAreaSalida.setText(txtAreaSalida.getText().trim());
+                    }
                     break;
+                }else{
+                    cifrado.clear();
+                    //Paso 6. Mover circularmente la clave
+                    asciisClave = c.rotacionCircular(asciisClave, cifrar);
+                }
             }
         }
 
@@ -245,8 +352,7 @@ public class Principal extends javax.swing.JFrame {
 
     public void imprimirParte(ArrayList<Integer> entrada) {
         for (Integer entrada1 : entrada) {
-            //System.out.println("Ascii: " + entrada1);
-            System.out.print(((char) entrada1.intValue()));
+            System.out.print(Character.toChars(entrada1)[0]);
         }
         System.out.println("");
 
@@ -260,6 +366,19 @@ public class Principal extends javax.swing.JFrame {
             ret.add(text.substring(start, Math.min(text.length(), start + 16)));
         }
         return ret;
+    }
+
+    public void escribirArchivo(boolean cifra, String texto){
+        try {
+            File f = new File("salida" + cifra + ".txt");
+            FileWriter fw = new FileWriter(f,true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.append(texto);
+            bw.newLine();
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -296,16 +415,17 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JRadioButton rboCifrado;
+    private javax.swing.JRadioButton rboDescifrado;
     private javax.swing.JTextArea txtAreaEntrada;
     private javax.swing.JTextArea txtAreaSalida;
     private javax.swing.JTextField txtClave;
