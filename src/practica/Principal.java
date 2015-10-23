@@ -8,9 +8,7 @@ package practica;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.ButtonGroup;
 
 /**
@@ -19,9 +17,18 @@ import javax.swing.ButtonGroup;
  */
 public class Principal extends javax.swing.JFrame {
 
-    String parse;
+    //String parse;
+    /**
+     * Array que maneja todos los datos de entrada
+     */
     ArrayList<String> datos = new ArrayList<>();
+    /**
+     * Variable para manejar la clave ingresada por el usuario
+     */
     String claveEntrada = "";
+    /**
+     * Bandera para saber si estamos cifrando = TRUE si descifra = FALSE
+     */
     boolean cifrar = true;
 
     /**
@@ -29,21 +36,30 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
+        /**
+         * Utilizado para agrupar los Radio button
+         */
         ButtonGroup group = new ButtonGroup();
         group.add(rboCifrado);
         group.add(rboDescifrado);
         inicializaFiles();
     }
-    public void inicializaFiles(){
-        try{
+
+    /**
+     * Borra los archivos de salida que se crearon previamente
+     */
+    private void inicializaFiles() {
+        try {
             File f = new File("salidatrue.txt");
-            if(f.exists())
+            if (f.exists()) {
                 f.delete();
-            f=new File("salidafalse.txt");
-            if(f.exists())
+            }
+            f = new File("salidafalse.txt");
+            if (f.exists()) {
                 f.delete();
-        }catch(Exception e){
-            
+            }
+        } catch (Exception e) {
+
         }
     }
 
@@ -199,7 +215,11 @@ public class Principal extends javax.swing.JFrame {
     private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtClaveActionPerformed
-
+    /**
+     * Controla la mayor parte de los eventos realizados con el boton
+     *
+     * @param evt
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         Cifrar c = new Cifrar();
@@ -246,12 +266,14 @@ public class Principal extends javax.swing.JFrame {
                     Integer result;
                     if (cifrar) {
                         result = td ^ cl;
-                        if(result>=256)
-                            result=result-256;
+                        if (result >= 256) {
+                            result = result - 256;
+                        }
                     } else {
                         result = ti ^ cl;
-                        if(result>=256)
-                            result=result-256;
+                        if (result >= 256) {
+                            result = result - 256;
+                        }
                     }
 
                     //System.out.println("Resultado: " + result);
@@ -259,18 +281,18 @@ public class Principal extends javax.swing.JFrame {
                     //Paso 4. Resultado con Izquierda
                     if (cifrar) {
                         result = result ^ ti;
-                        if(result>=256)
-                            result=result-256;
+                        if (result >= 256) {
+                            result = result - 256;
+                        }
                     } else {
                         result = result ^ td;
-                        if(result>=256)
-                            result=result-256;
+                        if (result >= 256) {
+                            result = result - 256;
+                        }
                     }
 
                     //System.out.println("Resultado: " + result);
                     if (cifrar) {
-                        cifrado.add((j - 8) /*+ ((j - 8) * i)*/, result);
-                    } else {
                         for (int k = 8; k < 16; k++) {
                             Integer td2 = asciisTexto.get(k);
                             if (cifrado.size() >= 8) {
@@ -279,24 +301,22 @@ public class Principal extends javax.swing.JFrame {
                                 cifrado.add((k - 8), td2);
                             }
                         }
-                        if (cifrado.size() >= 16) {
-                            cifrado.set(j, result);
-                        } else {
-                            cifrado.add(j, result);
-                        }
+                        cifrado.add(j, result);
+                    } else {
+                        cifrado.add((j - 8), result);
+
                     }
 
                 }
                 //Paso 5. Resultado a izquierda y el otro a derecha
                 for (int j = 8; j < asciisTexto.size(); j++) {
                     Integer ti;
-                    if (cifrar) {
+                    if (!cifrar) {
                         ti = asciisTexto.get(j - 8);
                         cifrado.add(j /*+ (j * i)*/, ti);
                     }
                 }
 
-                
                 escribirArchivo(cifrar, "=======================================");
                 System.out.println("=======================================");
                 System.out.println("Paso " + (9 - pasos) + ":  ");
@@ -313,33 +333,31 @@ public class Principal extends javax.swing.JFrame {
                 imprimirParte(asciisClave);
                 //System.out.println(asciisClave.toString());
                 escribirArchivo(cifrar, asciisClave.toString());
-                
+
                 asciisTexto.clear();
                 asciisTexto = new ArrayList<Integer>(cifrado);
-                
+
                 escribirArchivo(cifrar, "Texto Cifrado:");
                 System.out.println("Texto Cifrado:");
                 imprimirParte(cifrado);
                 //System.out.println(cifrado.toString());
                 escribirArchivo(cifrar, cifrado.toString());
-                
-                
-                
+
                 pasos--;
                 if (pasos == 0) {
                     txtAreaSalida.setText("");
                     txtClaveSalida.setText("");
                     for (Integer cifrado1 : cifrado) {
-                        txtAreaSalida.setText(txtAreaSalida.getText()+ Character.toChars(cifrado1)[0]);
+                        txtAreaSalida.setText(txtAreaSalida.getText() + Character.toChars(cifrado1)[0]);
                     }
                     for (Integer asciisClave1 : asciisClave) {
-                        txtClaveSalida.setText(txtClaveSalida.getText()+Character.toChars(asciisClave1)[0]);
+                        txtClaveSalida.setText(txtClaveSalida.getText() + Character.toChars(asciisClave1)[0]);
                     }
-                    if(!cifrar){
+                    if (!cifrar) {
                         txtAreaSalida.setText(txtAreaSalida.getText().trim());
                     }
                     break;
-                }else{
+                } else {
                     cifrado.clear();
                     //Paso 6. Mover circularmente la clave
                     asciisClave = c.rotacionCircular(asciisClave, cifrar);
@@ -350,6 +368,11 @@ public class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * Utilizado para imprimir las partes de texto ingresadas
+     *
+     * @param entrada Texto a imprimir
+     */
     public void imprimirParte(ArrayList<Integer> entrada) {
         for (Integer entrada1 : entrada) {
             System.out.print(Character.toChars(entrada1)[0]);
@@ -358,6 +381,12 @@ public class Principal extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Divide el texto en pedazos de 16 caracteres
+     *
+     * @param text el texto total a separar para luego codificar
+     * @return Regresa un array con el total de textos con 16 caracteres
+     */
     public static ArrayList<String> dividirTexto(String text) {
         // Give the list the right capacity to start with. You could use an array
         // instead if you wanted.
@@ -368,10 +397,16 @@ public class Principal extends javax.swing.JFrame {
         return ret;
     }
 
-    public void escribirArchivo(boolean cifra, String texto){
+    /**
+     * Escribe archivo de entrada o salida segun la seleccion del comboBox
+     *
+     * @param cifra varibale que establece si se esta cifrando o descifrando
+     * @param texto el texto que se va escribir
+     */
+    public void escribirArchivo(boolean cifra, String texto) {
         try {
             File f = new File("salida" + cifra + ".txt");
-            FileWriter fw = new FileWriter(f,true);
+            FileWriter fw = new FileWriter(f, true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.append(texto);
             bw.newLine();
