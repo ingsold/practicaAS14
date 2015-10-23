@@ -51,7 +51,7 @@ public class Cifrar {
     }
 
     public String agregarEspacios(String entrada, int cantidad) {
-        char c = '_';
+        char c = ' ';
         int number = cantidad - entrada.length();
         char[] repeat = new char[number];
         Arrays.fill(repeat, c);
