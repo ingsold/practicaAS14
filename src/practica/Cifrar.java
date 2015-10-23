@@ -5,9 +5,10 @@
  */
 package practica;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -144,4 +145,19 @@ public class Cifrar {
         Cifrar c = new Cifrar();
         c.agregarCeros(255);
     }*/
+    
+    public static String ReadFromFile(String FileName, String Encoding)throws IOException {
+       StringBuilder text = new StringBuilder();
+       String NL = System.getProperty("line.separator");
+       Scanner scanner = new Scanner(new FileInputStream(FileName), Encoding);
+       try {
+         while (scanner.hasNextLine()){
+           text.append(scanner.nextLine() + NL);
+         }
+       }
+       finally{
+         scanner.close();
+       }
+       return text.toString();
+   }
 }

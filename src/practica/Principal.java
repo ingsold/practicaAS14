@@ -280,6 +280,9 @@ public class Principal extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         Cifrar c = new Cifrar(this);
+        //Limpio los cuadros de texto
+        txtAreaSalida.setText("");
+        txtClaveSalida.setText("");
         txtAreaOutput.setText("");
         datos.clear();
         datos = dividirTexto(txtAreaEntrada.getText());
@@ -314,6 +317,7 @@ public class Principal extends javax.swing.JFrame {
                 writeToOutput("Tamaño menor a esperado, agregando espacios...");
                 datos.set(i, c.agregarEspacios(dato, 16));
             }
+            
 
             //Paso 1. Texto a Ascii
             ArrayList<Integer> asciisTexto = c.convertirAscii(datos.get(i));
@@ -384,13 +388,13 @@ public class Principal extends javax.swing.JFrame {
                 }
 
                 escribirArchivo(cifrar, "=======================================");
-                System.out.println("=======================================");
-                System.out.println("Paso " + (9 - pasos) + ":  ");
+                //System.out.println("=======================================");
+                //System.out.println("Paso " + (9 - pasos) + ":  ");
                 escribirArchivo(cifrar, "Paso " + (9 - pasos) + ":  ");
-                System.out.println("=======================================");
+                //System.out.println("=======================================");
                 escribirArchivo(cifrar, "=======================================");
                 escribirArchivo(cifrar, "Texto Entrada: ");
-                System.out.println("Texto Entrada: ");
+                //System.out.println("Texto Entrada: ");
                 
                 
                 writeToOutput("==================");;
@@ -402,7 +406,7 @@ public class Principal extends javax.swing.JFrame {
                 
                 //System.out.println(asciisTexto.toString());
                 escribirArchivo(cifrar, asciisTexto.toString());
-                System.out.println("Clave paso: ");
+                //System.out.println("Clave paso: ");
                 escribirArchivo(cifrar, "Clave paso: ");
                 
                 //System.out.println(asciisClave.toString());
@@ -426,8 +430,9 @@ public class Principal extends javax.swing.JFrame {
                 imprimirParte(cifrado);
 
                 pasos--;
+                
                 if (pasos == 0) {
-                    txtAreaSalida.setText("");
+                    //txtAreaSalida.setText("");
                     txtClaveSalida.setText("");
                     for (Integer cifrado1 : cifrado) {
                         txtAreaSalida.setText(txtAreaSalida.getText() + Character.toChars(cifrado1)[0]);
@@ -438,6 +443,7 @@ public class Principal extends javax.swing.JFrame {
                     if (!cifrar) {
                         txtAreaSalida.setText(txtAreaSalida.getText().trim());
                     }
+                    cifrado.clear();
                     break;
                 } else {
                     cifrado.clear();
