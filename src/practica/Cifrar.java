@@ -13,9 +13,15 @@ import java.util.Arrays;
  * @author Oswaldo
  */
 public class Cifrar {
+    
+    private Principal principal;
 
     public Cifrar() {
 
+    }
+    
+    public Cifrar(Principal principal){
+        this.principal = principal;
     }
 
     public Cifrar(String texto, String clave) {
@@ -117,8 +123,8 @@ public class Cifrar {
         System.out.println("PASA A ASCII ");
     }
 
-    public static void main(String args[]) {
+    /*public static void main(String args[]) {
         Cifrar c = new Cifrar();
         c.agregarCeros(255);
-    }
+    }*/
 }
