@@ -125,21 +125,6 @@ public class Cifrar {
     public void toascii() {
         System.out.println("PASA A ASCII ");
     }
-
-    public static String ReadFromFile(String FileName, String Encoding)throws IOException {
-        StringBuilder text = new StringBuilder();
-        String NL = System.getProperty("line.separator");
-        Scanner scanner = new Scanner(new FileInputStream(FileName), Encoding);
-        try {
-          while (scanner.hasNextLine()){
-            text.append(scanner.nextLine() + NL);
-          }
-        }
-        finally{
-          scanner.close();
-        }
-        return text.toString();
-    }
     
     /*public static void main(String args[]) {
         Cifrar c = new Cifrar();
