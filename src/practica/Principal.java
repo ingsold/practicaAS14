@@ -101,6 +101,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -258,6 +259,14 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem1);
 
+        jMenuItem2.setText("Guardar cifrado/descifrado");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -279,203 +288,223 @@ public class Principal extends javax.swing.JFrame {
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        Cifrar c = new Cifrar(this);
-        //Limpio los cuadros de texto
-        txtAreaSalida.setText("");
-        txtClaveSalida.setText("");
-        txtAreaOutput.setText("");
-        datos.clear();
-        datos = dividirTexto(txtAreaEntrada.getText());
-        System.out.println(datos.size());
-        if (rboDescifrado.isSelected()) {
-            cifrar = false;
-            writeToOutput("Inicio Cifrado...");
+        if (txtClave.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Escriba una clave para continuar ",
+                    "Error de cifrado",
+                    JOptionPane.ERROR_MESSAGE);
+        } else if (txtAreaEntrada.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Debe ingresar un texto para cifrar/descifrar ",
+                    "Error de cifrado",
+                    JOptionPane.ERROR_MESSAGE);
         } else {
-            cifrar = true;
-            writeToOutput("Inicio Descifrado...");
-        }
-        //Revisar clave
-        writeToOutput("Revisando clave");
-        if (txtClave.getText().length() == 8) {
-            claveEntrada = txtClave.getText();
-        } else if (txtClave.getText().length() < 8) {
-            writeToOutput("Clave menor a 8 agrego espacios");
-            claveEntrada = c.agregarEspacios(txtClave.getText(), 8);
-        } else {
-            writeToOutput("Clave mayor a 8, tomo solo 8 caracteres");
-            claveEntrada = txtClave.getText().substring(0, 8);
-        }
-        System.out.println("Clave Entrada: " + claveEntrada);
-        writeToOutput("Clave Entrada: " + claveEntrada);
-        
-        ArrayList<Integer> cifrado = new ArrayList<>();
-        for (int i = 0; i < datos.size(); i++) {
-            String dato = datos.get(i);
-            //Paso 0. Agregar espacios si es necesario al texto
-            if (dato.length() < 16) {
-                //datos.remove(i);
-                writeToOutput("Tamaño menor a esperado, agregando espacios...");
-                datos.set(i, c.agregarEspacios(dato, 16));
+            Cifrar c = new Cifrar(this);
+            //Limpio los cuadros de texto
+            txtAreaSalida.setText("");
+            txtClaveSalida.setText("");
+            txtAreaOutput.setText("");
+            //Limpio la variable de entrada
+            datos.clear();
+            datos = dividirTexto(txtAreaEntrada.getText());
+            System.out.println(datos.size());
+            if (rboDescifrado.isSelected()) {
+                cifrar = false;
+                writeToOutput("Inicio Cifrado...");
+            } else {
+                cifrar = true;
+                writeToOutput("Inicio Descifrado...");
             }
-            
+            //Revisar clave
+            writeToOutput("Revisando clave");
+            if (txtClave.getText().length() == 8) {
+                claveEntrada = txtClave.getText();
+            } else if (txtClave.getText().length() < 8) {
+                writeToOutput("Clave menor a 8 agrego espacios");
+                claveEntrada = c.agregarEspacios(txtClave.getText(), 8);
+            } else {
+                writeToOutput("Clave mayor a 8, tomo solo 8 caracteres");
+                claveEntrada = txtClave.getText().substring(0, 8);
+            }
+            System.out.println("Clave Entrada: " + claveEntrada);
+            writeToOutput("Clave Entrada: " + claveEntrada);
 
-            //Paso 1. Texto a Ascii
-            ArrayList<Integer> asciisTexto = c.convertirAscii(datos.get(i));
-            ArrayList<Integer> asciisClave = c.convertirAscii(claveEntrada);
-            //System.out.println("SIZES: "+asciisClave.size()+" "+ asciisTexto.size());
-            //ArrayList<Integer> cifrado=new ArrayList<>(datos.size()*16);
-            //Paso 2. Ascii operaciones
-            int pasos = 8;
-            while (pasos > 0) {
-                for (int j = 8; j < asciisTexto.size(); j++) {
-                    Integer td = asciisTexto.get(j);
-                    Integer cl = asciisClave.get(j - 8);
-                    Integer ti = asciisTexto.get(j - 8);
-                    //System.out.println("Asciis " + td + " " + cl);
-                    //Paso 3. Derecha con clave
-                    Integer result;
-                    if (cifrar) {
-                        result = td ^ cl;
-                        if (result >= 256) {
-                            result = result - 256;
-                        }
-                    } else {
-                        result = ti ^ cl;
-                        if (result >= 256) {
-                            result = result - 256;
-                        }
-                    }
+            ArrayList<Integer> cifrado = new ArrayList<>();
+            for (int i = 0; i < datos.size(); i++) {
+                String dato = datos.get(i);
+                //Paso 0. Agregar espacios si es necesario al texto
+                if (dato.length() < 16) {
+                    //datos.remove(i);
+                    writeToOutput("Tamaño menor a esperado, agregando espacios...");
+                    datos.set(i, c.agregarEspacios(dato, 16));
+                }
 
-                    //System.out.println("Resultado: " + result);
-                    //System.out.println("Asciis " + result + " " + ti);
-                    //Paso 4. Resultado con Izquierda
-                    if (cifrar) {
-                        result = result ^ ti;
-                        if (result >= 256) {
-                            result = result - 256;
-                        }
-                    } else {
-                        result = result ^ td;
-                        if (result >= 256) {
-                            result = result - 256;
-                        }
-                    }
-
-                    //System.out.println("Resultado: " + result);
-                    if (cifrar) {
-                        for (int k = 8; k < 16; k++) {
-                            Integer td2 = asciisTexto.get(k);
-                            if (cifrado.size() >= 8) {
-                                break;
-                            } else {
-                                cifrado.add((k - 8), td2);
+                //Paso 1. Texto a Ascii
+                ArrayList<Integer> asciisTexto = c.convertirAscii(datos.get(i));
+                ArrayList<Integer> asciisClave = c.convertirAscii(claveEntrada);
+                //System.out.println("SIZES: "+asciisClave.size()+" "+ asciisTexto.size());
+                //ArrayList<Integer> cifrado=new ArrayList<>(datos.size()*16);
+                //Paso 2. Ascii operaciones
+                int pasos = 8;
+                while (pasos > 0) {
+                    for (int j = 8; j < asciisTexto.size(); j++) {
+                        Integer td = asciisTexto.get(j);
+                        Integer cl = asciisClave.get(j - 8);
+                        Integer ti = asciisTexto.get(j - 8);
+                        //System.out.println("Asciis " + td + " " + cl);
+                        //Paso 3. Derecha con clave
+                        Integer result;
+                        if (cifrar) {
+                            result = td ^ cl;
+                            if (result >= 256) {
+                                result = result - 256;
+                            }
+                        } else {
+                            result = ti ^ cl;
+                            if (result >= 256) {
+                                result = result - 256;
                             }
                         }
-                        cifrado.add(j, result);
+
+                        //System.out.println("Resultado: " + result);
+                        //System.out.println("Asciis " + result + " " + ti);
+                        //Paso 4. Resultado con Izquierda
+                        if (cifrar) {
+                            result = result ^ ti;
+                            if (result >= 256) {
+                                result = result - 256;
+                            }
+                        } else {
+                            result = result ^ td;
+                            if (result >= 256) {
+                                result = result - 256;
+                            }
+                        }
+
+                        //System.out.println("Resultado: " + result);
+                        if (cifrar) {
+                            for (int k = 8; k < 16; k++) {
+                                Integer td2 = asciisTexto.get(k);
+                                if (cifrado.size() >= 8) {
+                                    break;
+                                } else {
+                                    cifrado.add((k - 8), td2);
+                                }
+                            }
+                            cifrado.add(j, result);
+                        } else {
+                            cifrado.add((j - 8), result);
+
+                        }
+
+                    }
+                    //Paso 5. Resultado a izquierda y el otro a derecha
+                    for (int j = 8; j < asciisTexto.size(); j++) {
+                        Integer ti;
+                        if (!cifrar) {
+                            ti = asciisTexto.get(j - 8);
+                            cifrado.add(j /*+ (j * i)*/, ti);
+                        }
+                    }
+
+                    escribirArchivo(cifrar, "=======================================");
+                    //System.out.println("=======================================");
+                    //System.out.println("Paso " + (9 - pasos) + ":  ");
+                    escribirArchivo(cifrar, "Paso " + (9 - pasos) + ":  ");
+                    //System.out.println("=======================================");
+                    escribirArchivo(cifrar, "=======================================");
+                    escribirArchivo(cifrar, "Texto Entrada: ");
+                    //System.out.println("Texto Entrada: ");
+
+                    writeToOutput("==================");;
+                    writeToOutput("Paso " + (9 - pasos) + ":  ");
+                    writeToOutput("==================");;
+                    writeToOutput("Texto entrada: ");
+
+                    imprimirParte(asciisTexto);
+
+                    //System.out.println(asciisTexto.toString());
+                    escribirArchivo(cifrar, asciisTexto.toString());
+                    //System.out.println("Clave paso: ");
+                    escribirArchivo(cifrar, "Clave paso: ");
+
+                    //System.out.println(asciisClave.toString());
+                    escribirArchivo(cifrar, asciisClave.toString());
+
+                    writeToOutput("Clave paso: ");
+
+                    imprimirParte(asciisClave);
+
+                    asciisTexto.clear();
+                    asciisTexto = new ArrayList<Integer>(cifrado);
+
+                    escribirArchivo(cifrar, "Texto Cifrado:");
+                    System.out.println("Texto Cifrado:");
+
+                    //System.out.println(cifrado.toString());
+                    escribirArchivo(cifrar, cifrado.toString());
+
+                    writeToOutput("Texto Cifrado:");
+
+                    imprimirParte(cifrado);
+
+                    pasos--;
+
+                    if (pasos == 0) {
+                        //txtAreaSalida.setText("");
+                        txtClaveSalida.setText("");
+                        for (Integer cifrado1 : cifrado) {
+                            txtAreaSalida.setText(txtAreaSalida.getText() + Character.toChars(cifrado1)[0]);
+                        }
+                        for (Integer asciisClave1 : asciisClave) {
+                            txtClaveSalida.setText(txtClaveSalida.getText() + Character.toChars(asciisClave1)[0]);
+                        }
+                        if (!cifrar) {
+                            txtAreaSalida.setText(txtAreaSalida.getText().trim());
+                        }
+                        cifrado.clear();
+                        break;
                     } else {
-                        cifrado.add((j - 8), result);
-
+                        cifrado.clear();
+                        //Paso 6. Mover circularmente la clave
+                        asciisClave = c.rotacionCircular(asciisClave, cifrar);
                     }
-
-                }
-                //Paso 5. Resultado a izquierda y el otro a derecha
-                for (int j = 8; j < asciisTexto.size(); j++) {
-                    Integer ti;
-                    if (!cifrar) {
-                        ti = asciisTexto.get(j - 8);
-                        cifrado.add(j /*+ (j * i)*/, ti);
-                    }
-                }
-
-                escribirArchivo(cifrar, "=======================================");
-                //System.out.println("=======================================");
-                //System.out.println("Paso " + (9 - pasos) + ":  ");
-                escribirArchivo(cifrar, "Paso " + (9 - pasos) + ":  ");
-                //System.out.println("=======================================");
-                escribirArchivo(cifrar, "=======================================");
-                escribirArchivo(cifrar, "Texto Entrada: ");
-                //System.out.println("Texto Entrada: ");
-                
-                
-                writeToOutput("==================");;
-                writeToOutput("Paso " + (9 - pasos) + ":  ");
-                writeToOutput("==================");;
-                writeToOutput("Texto entrada: ");
-                
-                imprimirParte(asciisTexto);
-                
-                //System.out.println(asciisTexto.toString());
-                escribirArchivo(cifrar, asciisTexto.toString());
-                //System.out.println("Clave paso: ");
-                escribirArchivo(cifrar, "Clave paso: ");
-                
-                //System.out.println(asciisClave.toString());
-                escribirArchivo(cifrar, asciisClave.toString());
-                
-                writeToOutput("Clave paso: ");
-                
-                imprimirParte(asciisClave);
-
-                asciisTexto.clear();
-                asciisTexto = new ArrayList<Integer>(cifrado);
-
-                escribirArchivo(cifrar, "Texto Cifrado:");
-                System.out.println("Texto Cifrado:");
-                
-                //System.out.println(cifrado.toString());
-                escribirArchivo(cifrar, cifrado.toString());
-     
-                writeToOutput("Texto Cifrado:");
-     
-                imprimirParte(cifrado);
-
-                pasos--;
-                
-                if (pasos == 0) {
-                    //txtAreaSalida.setText("");
-                    txtClaveSalida.setText("");
-                    for (Integer cifrado1 : cifrado) {
-                        txtAreaSalida.setText(txtAreaSalida.getText() + Character.toChars(cifrado1)[0]);
-                    }
-                    for (Integer asciisClave1 : asciisClave) {
-                        txtClaveSalida.setText(txtClaveSalida.getText() + Character.toChars(asciisClave1)[0]);
-                    }
-                    if (!cifrar) {
-                        txtAreaSalida.setText(txtAreaSalida.getText().trim());
-                    }
-                    cifrado.clear();
-                    break;
-                } else {
-                    cifrado.clear();
-                    //Paso 6. Mover circularmente la clave
-                    asciisClave = c.rotacionCircular(asciisClave, cifrar);
                 }
             }
         }
-
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        try{
-            String CompleteFileName="";
+        try {
+            String CompleteFileName = "";
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Text files","txt");
+                    "Text files", "txt");
             chooser.setFileFilter(filter);
             int returnVal = chooser.showOpenDialog(this);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
-               CompleteFileName=chooser.getSelectedFile().getAbsolutePath();
-               txtAreaEntrada.setText(Cifrar.ReadFromFile(CompleteFileName, "UTF8"));
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                CompleteFileName = chooser.getSelectedFile().getAbsolutePath();
+                txtAreaEntrada.setText(Cifrar.ReadFromFile(CompleteFileName, "UTF8"));
             }
-        }catch (Exception e){
-             JOptionPane.showMessageDialog(this,
-            "Error en lectura de archivo " + e.getMessage(),
-            "Error de lectura",
-            JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error en lectura de archivo " + e.getMessage(),
+                    "Error de lectura",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        if(txtAreaSalida.getText().length()>0)
+           escribirSalida(txtAreaSalida.getText());
+            else
+           JOptionPane.showMessageDialog(this,
+                   "No se puede escribir un archivo sin texto cifrado/descifrado",
+                   "Error de Escritura",
+                   JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * Utilizado para imprimir las partes de texto ingresadas
@@ -485,8 +514,8 @@ public class Principal extends javax.swing.JFrame {
     public void imprimirParte(ArrayList<Integer> entrada) {
         for (int entrada1 : entrada) {
             System.out.print(Character.toChars(entrada1)[0]);
-    
-            txtAreaOutput.append(Character.toString ((char) entrada1));
+
+            txtAreaOutput.append(Character.toString((char) entrada1));
         }
         txtAreaOutput.append("\n");
         System.out.println("");
@@ -526,7 +555,46 @@ public class Principal extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
+    public void escribirSalida(String texto) {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Seleccionar archivo para guardar");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Text files", "txt");
+        chooser.setFileFilter(filter);
+        int userSelection = chooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = chooser.getSelectedFile();
+            try {
+                File f;
+                if (!fileToSave.getName().endsWith(".txt")) {
+                    f = new File(fileToSave.getAbsolutePath() + ".txt");
+                } else {
+                    f = new File(fileToSave.getAbsolutePath());
+                }
+
+                FileWriter fw = new FileWriter(f, true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.append(texto);
+                bw.close();
+                JOptionPane.showMessageDialog(this,
+                        "El archivo ha sido almacenado con éxito en: " + f.getAbsolutePath());
+                if (!fileToSave.getName().endsWith(".txt")) {
+                    f = new File(fileToSave.getAbsolutePath() + ".clave");
+                } else {
+                    f = new File(fileToSave.getAbsolutePath()+".clave");
+                }
+                fw = new FileWriter(f, true);
+                bw = new BufferedWriter(fw);
+                bw.append(txtClaveSalida.getText());
+                bw.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void writeToOutput(String output) {
         txtAreaOutput.append(output + "\n");
     }
@@ -546,9 +614,8 @@ public class Principal extends javax.swing.JFrame {
         } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         /* Create and display the form */
- 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 new Principal().setVisible(true);
@@ -567,6 +634,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
